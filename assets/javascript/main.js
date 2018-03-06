@@ -4,9 +4,7 @@ window.onload = function () {
       answerArea   = document.getElementsByClassName('answers')[0],
       checker      = document.getElementsByClassName('checker')[0],
       current      = Math.floor(Math.random()),
-      timer,
-      progress,
-      max;
+      timeleft     = 10;
   
      // An object that holds all the questions + possible answers.
      // In the array --> last digit gives the right answer position
@@ -109,8 +107,11 @@ window.onload = function () {
       if (current < Object.keys(allQuestions).length -1) {
         current += Math.floor(Math.random() + 1);
         
+        timeleft = 10;
+        downloadTimer;
         loadQuestion(current);
         loadAnswers(current);
+
       } else {
         questionArea.innerHTML = 'Done';
         answerArea.innerHTML = '';
@@ -125,29 +126,28 @@ window.onload = function () {
 
   	if (bool) {
   		$('#cur-score').html(++curScore);
+
   	} else {
   		$('#cur-score').html(--curScore);
   	}
   }
+  	
+    var downloadTimer = setInterval(function(){
+    timeleft--;
+    document.getElementById("countdown-timer").textContent = timeleft;
+    if(timeleft == 0){
+    	clearInterval(downloadTimer);
+    	timeleft = 10;
+    	answerTracker(false);
+    	loadQuestion(current += Math.floor(Math.random() + 1));
+    	downloadTimer;
+    }
+    },1000);
 
-$(document).ready(function() {
-progress = $("#myProgress");
-max = progress.attr("max");
-timer = setInterval("updateBar()", 1000);
-});
-
-function updateBar() {
-var current = progress.attr("value");
-current -= 1;
-progress.attr("value", current);
-
-if (current <= max) {
-clearInterval(timer);
-}
-}
+    
   
   // Start the quiz right away
   loadQuestion(current);
   loadAnswers(current);
-  
+  countdownTimer();
 };
