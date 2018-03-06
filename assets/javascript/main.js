@@ -3,7 +3,10 @@ window.onload = function () {
   var questionArea = document.getElementsByClassName('questions')[0],
       answerArea   = document.getElementsByClassName('answers')[0],
       checker      = document.getElementsByClassName('checker')[0],
-      current      = 0,
+      current      = Math.floor(Math.random()),
+      timer,
+      progress,
+      max;
   
      // An object that holds all the questions + possible answers.
      // In the array --> last digit gives the right answer position
@@ -14,7 +17,7 @@ window.onload = function () {
         'Santiago is the capital of which country?' : ['Croatia', 'Cuba', 'Congo', 'Chile', 3],
         'Tehran is the capital of which country?' : ['Iraq', 'Iran', 'Kenya', 'Kosovo', 1],
         'Buenos Aires is the capital of which country?' : ['Bermuda', 'Bolivia', 'Argentina', 'Armenia', 2],
-        'New Delhi is the capital of which country?' : ['', 'Haiti', 'Iceland', 'Egypt', 3],
+        'New Delhi is the capital of which country?' : ['India', 'Haiti', 'Iceland', 'Egypt', 3],
         'Pyongyang is the capital of which country?' : ['South Korea', 'North Korea', 'Kazakhstan', 'Hungary', 1],
         'Kabul is the capital of which country?' : ['Andorra', 'Ukraine', 'Afganistan', 'Azerbaijan', 2],
         'Reykjavik is the capital of which country?' : ['Jamaica', 'Jordan', 'Iceland', 'Ireland', 2],
@@ -30,24 +33,32 @@ window.onload = function () {
         'Mogadishu is the capital of which country?' : ['Tanzania', 'Senegal', 'Kenya', 'Somalia', 3],
         'Bucharest is the capital of which country?' : ['Bulgaria', 'Romania', 'Hungary', 'Montenegro', 1],
         'Poland is the capital of which country?' : ['Chech Republic', 'Poland', 'Samoa', 'San Marino', 1],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
-        'Cairo is the capital of which country?' : ['Georgia', 'Haiti', 'Iceland', 'Egypt', 3],
+        'Colombo is the capital of which country?' : ['Taiwan', 'Tanzania', 'Sri Lanka', 'Slovakia', 2],
+        'Wellington is the capital of which country?' : ['Pakistan', 'Poland', 'New Zealand', 'Montenegro', 2],
+        'Ulaanbaatar is the capital of which country?' : ['Montenegro', 'Mongolia', 'Morrocco', 'Mozambique', 1],
+        'Male is the capital of which country?' : ['Moldova', 'Maldives', 'Mauritius', 'Mauritania', 1],
+        'Caracas is the capital of which country?' : ['Venezuela', 'Uganda', 'Senegal', 'Tajikistan', 0],
+        'Oslo is the capital of which country?' : ['Finland', 'Denmark', 'Sweden', 'Norway', 3],
+        'Bern is the capital of which country?' : ['Austria', 'Liechenstein', 'Switzerland', 'Sweden', 2],
+        'Doha is the capital of which country?' : ['Saudi Arabia', 'Jordan', 'Qatar', 'Syria', 2],
+        'Addis Ababa is the capital of which country?' : ['Ethiopia', 'Eritrea', 'Ghana', 'Mauritania', 0],
+        'Amman is the capital of which country?' : ['Jordan', 'Uganda', 'Senegal', 'Georgia', 0],
+        'Antananarivo is the capital of which country?' : ['Finland', 'Turkmenistan', 'Madagascar', 'Norway', 2],
+        'Baku is the capital of which country?' : ['Brunei', 'Gambia', 'Azerbaijan', 'Sweden', 2],
+        'Bandar Seri Begawan is the capital of which country?' : ['Saudi Arabia', 'Gambia', 'Brunei', 'Belize', 2],
+        'Brazzaville is the capital of which country?' : ['Kyrgystan', 'Barbados', 'Mauritius', 'Republic of the Congo', 3],
+        'Cardiff is the capital of which country?' : ['Venezuela', 'Ireland', 'Wales', 'Scotland', 2],
+        'Chisinau is the capital of which country?' : ['Moldova', 'Senegal', 'Bangladesh', 'Guinea-Bissasu', 0],
+        'Dakar is the capital of which country?' : ['Austria', 'Senegal', 'Tanzania', 'Tajikistan', 1],
+        'Freetown is the capital of which country?' : ['Sierra Leone', 'Guyana', 'Guatemala', 'Guam', 0],
+        'Hanoi is the capital of which country?' : ['Vietnam', 'Gibraltar', 'Moldova', 'South Sudan', 0],
+        'Kampala is the capital of which country?' : ['Senegal', 'Venezuela', 'Uganda', 'Tajikistan', 2],
+        'Lisbon is the capital of which country?' : ['Austria', 'Portugal', 'Angola', 'Zambia', 1],
+        'Manila is the capital of which country?' : ['Laos', 'Jordan', 'Philippines', 'Cambodia', 2],
+        'Minsk is the capital of which country?' : ['Moldova', 'Belarus', 'Monaco', 'Liberia', 1],
+        'Montevideo is the capital of which country?' : ['Uruguay', 'Oman', 'Bahamas', 'Niger', 0],
       };
-      
+
   function loadQuestion(curr) {
   // This function loads all the question into the questionArea
   // It grabs the current question based on the 'current'-variable
@@ -90,13 +101,13 @@ window.onload = function () {
           correctAnswer = arr[arr.length-1];
       
       if (givenAnswer === correctAnswer) {
-        addChecker(true);             
+        answerTracker(true);             
       } else {
-        addChecker(false);                        
+        answerTracker(false);                        
       }
       
       if (current < Object.keys(allQuestions).length -1) {
-        current += 1;
+        current += Math.floor(Math.random() + 1);
         
         loadQuestion(current);
         loadAnswers(current);
@@ -107,26 +118,33 @@ window.onload = function () {
                               
     };
   }
-  
-  function addChecker(bool) {
-  // This function adds a div element to the page
-  // Used to see if it was correct or false
-  
-    var createDiv = document.createElement('div'),
-        txt       = document.createTextNode(current + 1);
-    
-    createDiv.appendChild(txt);
-    
-    if (bool) {
-      
-      createDiv.className += 'correct';
-      checker.appendChild(createDiv);
-    } else {
-      createDiv.className += 'false';
-      checker.appendChild(createDiv);
-    }
+
+
+  function answerTracker(bool) {
+  	var curScore = 0;
+
+  	if (bool) {
+  		$('#cur-score').html(++curScore);
+  	} else {
+  		$('#cur-score').html(--curScore);
+  	}
   }
-  
+
+$(document).ready(function() {
+progress = $("#myProgress");
+max = progress.attr("max");
+timer = setInterval("updateBar()", 1000);
+});
+
+function updateBar() {
+var current = progress.attr("value");
+current -= 1;
+progress.attr("value", current);
+
+if (current <= max) {
+clearInterval(timer);
+}
+}
   
   // Start the quiz right away
   loadQuestion(current);
